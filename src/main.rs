@@ -9,8 +9,12 @@ fn main() {
     /*println!("width = {}", width);
     println!("height = {}", height);*/
 
-    let board = random_board(width, height);
-    render(&board, width, height)
+    let mut board = random_board(width, height);
+    render(&board, width, height);
+    board = next_board(&board, width, height);
+    render(&board, width, height);
+
+    
 }
 
 /// Creates a board with every cell dead
@@ -69,6 +73,7 @@ fn render(board: &[Vec<bool>], width: usize, height:usize) {
 
 }
 
+///Calculates next state of a cell (current) based on its neighborhood
 fn next_state(current: bool, neighborhood: i32) -> bool {
     if current {
         match neighborhood{
@@ -85,12 +90,51 @@ fn next_state(current: bool, neighborhood: i32) -> bool {
     }
 }
 
+///Calculates the next state of the board
 fn next_board(board: &[Vec<bool>], width: usize, height:usize) -> Vec<Vec<bool>>{
     let mut next_board_state: Vec<Vec<bool>> = vec![vec![false; width];height];
 
     for i in 0..width {
         for j in 0..height {
-            let neighborhood: i32 = 0;
+            let mut neighborhood: i32 = 0;
+            
+            if (i!=0) && (j!=0) && (i!=(width-1)) && (j!=(height-1)) {
+                        neighborhood = board[i-1][j-1] as i32 + board[i-1][j] as i32 + board[i-1][j+1] as i32 + board[i][j-1] as i32 + board[i][j+1] as i32 + board[i+1][j-1] as i32 + board[i+1][j] as i32 + board[i+1][j+1] as i32;
+                    }
+                    else if i==0 {
+                        if j!=0 {
+                            if j!=(height-1) {
+                                neighborhood = board[i][j-1] as i32 + board[i][j+1] as i32 + board[i+1][j-1] as i32 + board[i+1][j] as i32 + board[i+1][j+1] as i32;
+                            }
+                            else {
+                                neighborhood = board[i][j-1] as i32 + board[i+1][j-1] as i32 + board[i+1][j] as i32;
+                            }
+                        }
+                        else {
+                            neighborhood = board[i][j+1] as i32 + board[i+1][j+1] as i32 + board[i+1][j] as i32;
+                        }
+                    }
+                    else if i==width-1 {
+                        if j!=0 {
+                            if j!=(height-1) {
+                                neighborhood = board[i][j-1] as i32 + board[i][j+1] as i32 + board[i-1][j-1] as i32 + board[i-1][j] as i32 + board[i-1][j+1] as i32;
+                            }
+                            else {
+                                neighborhood = board[i][j-1] as i32 + board[i-1][j-1] as i32 + board[i-1][j] as i32;
+                            }
+                        }
+                        else {
+                            neighborhood = board[i][j+1] as i32 + board[i-1][j+1] as i32 + board[i-1][j] as i32;
+                        }
+                    }
+                    else if j==0 {
+                        //(i!=0) && (i!=width-1)
+                        neighborhood = board[i-1][j] as i32 + board[i-1][j+1] as i32 + board[i][j+1] as i32 + board[i+1][j] as i32 + board[i+1][j+1] as i32;
+                    }
+                    else if j==(height-1) {
+                        //(i!=0) && (i!=width-1)
+                        neighborhood = board[i-1][j-1] as i32 + board[i-1][j] as i32 + board[i][j-1] as i32 + board[i+1][j-1] as i32 + board[i+1][j] as i32;
+                    }
 
             next_board_state[i][j] = next_state(board[i][j], neighborhood);
         }
