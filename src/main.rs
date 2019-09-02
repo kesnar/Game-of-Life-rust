@@ -142,3 +142,34 @@ fn next_board(board: &[Vec<bool>], width: usize, height:usize) -> Vec<Vec<bool>>
 
     next_board_state
 }
+
+#[test]
+fn check_next_state() {
+    //TEST 1: dead cells with no live neighbors should stay dead.
+    let init_state1 = vec![
+        vec![false,false,false],
+        vec![false,false,false],
+        vec![false,false,false]
+    ];
+    
+    let expected_next_state1 = vec![
+        vec![false,false,false],
+        vec![false,false,false],
+        vec![false,false,false]
+    ];
+
+    assert_eq!(expected_next_state1, next_board(&init_state1, 3, 3));
+
+    //TEST 2: dead cells with exactly 3 neighbors should come alive.
+    let init_state2 = vec![
+        vec![false,false,true],
+        vec![false,true,true],
+        vec![false,false,false]
+    ];
+    let expected_next_state2 = vec![
+        vec![false,true,true],
+        vec![false,true,true],
+        vec![false,false,false]
+    ];
+    assert_eq!(expected_next_state2, next_board(&init_state2, 3, 3));
+}
