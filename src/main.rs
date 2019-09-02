@@ -4,8 +4,8 @@ use rand::Rng;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let width:usize = args[1].parse::<usize>().unwrap();
-    let height:usize = args[2].parse::<usize>().unwrap();
+    let width:usize = args[1].parse::<usize>().expect("Not enough arguments!");
+    let height:usize = args[2].parse::<usize>().unwrap("Not enough arguments!");
 
     /*println!("width = {}", width);
     println!("height = {}", height);*/
