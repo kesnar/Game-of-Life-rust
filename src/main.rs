@@ -1,5 +1,6 @@
-use std::env;
+use std::{env, thread, time};
 use rand::Rng;
+
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -10,9 +11,12 @@ fn main() {
     println!("height = {}", height);*/
 
     let mut board = random_board(width, height);
-    render(&board, width, height);
-    board = next_board(&board, width, height);
-    render(&board, width, height);
+    loop {
+        print!("{}[2J", 27 as char);
+        render(&board, width, height);
+        thread::sleep(time::Duration::from_millis(100));
+        board = next_board(&board, width, height);
+    }
 
     
 }
